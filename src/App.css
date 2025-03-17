@@ -40,3 +40,18 @@
 .read-the-docs {
   color: #888;
 }
+
+/* 
+  Style your elements by creating CSS classes here.
+  Below, you can see an example of a class called "menu" that changes the color of the text to blue. Modify according to your needs.
+*/
+
+.menu {
+  color: #000000;
+} 
+
+.menu-grid {
+  display: grid;  
+  grid-template-columns: repeat(auto-fit, minmax(1fr));
+  gap: 20px;
+} 

@@ -1,0 +1,20 @@
+.menu-header {
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 30px;
+    background-color: #f8f9fa;
+}
+
+.restaurant-logo {
+    width: 100vw;
+    max-width: 700px;
+    height: auto;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.restaurant-description {
+    text-align: center;
+    color: #04012e;
+    margin-bottom: 30px;
+}
