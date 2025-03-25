@@ -5,7 +5,7 @@ const MenuHeader = () => {
     return (
         <header className="menu-header">
             <img 
-                src="/images/p1hero.jpg" 
+                src= {`${import.meta.env.BASE_URL}images/p1hero.jpg`}
                 alt="Japanese Restaurant Logo"  
                 className="restaurant-logo"
             />

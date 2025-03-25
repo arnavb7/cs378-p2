@@ -2,8 +2,8 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import MenuHeader from './components/MenuHeader.js'
-import MenuItem from './components/MenuItem.js'
+import MenuHeader from './components/MenuHeader.jsx'
+import MenuItem from './components/MenuItem.jsx'
 
 // import 'bootstrap/dist/css/bootstrap.min.css'; // This imports bootstrap css styles. You can use bootstrap or your own classes by using the className attribute in your elements.
 

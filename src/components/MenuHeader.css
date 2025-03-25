@@ -1,8 +1,10 @@
 .menu-header {
     text-align: center;
-    padding: 20px;
+    padding: 1px 20px;
     margin-bottom: 30px;
-    background-color: #f8f9fa;
+    font-family: "Trirong", serif;
+    font-size: 1.1rem;
+    background-color: #e8e8e8;
 }
 
 .restaurant-logo {
