@@ -83,53 +83,159 @@ const menuItems = [
 ];
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [itemQuantities, setItemQuantities] = useState(() => {
+    const initialQuantities = {};
+    menuItems.forEach(item => {
+      initialQuantities[item.id] = 0;
+    });
+    return initialQuantities;
+  });
+
+  const [showFormPopup, setShowFormPopup] = useState(false);
+  const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
+  const [orderSummary, setOrderSummary] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    phone: ''
+  });
+
+  const calculateTotal = () => {
+    let total = 0;
+    menuItems.forEach(item => {
+      total += item.price * itemQuantities[item.id];
+    });
+    return total.toFixed(2);
+  };
+
+  const updateQuantity = (itemId, newQuantity) => {
+    setItemQuantities(prevQuantities => ({
+      ...prevQuantities,
+      [itemId]: newQuantity
+    }));
+  };
+
+  const clearCart = () => {
+    const resetQuantities = {};
+    menuItems.forEach(item => {
+      resetQuantities[item.id] = 0;
+    });
+    if (calculateTotal() === "0.00") {
+      alert("There is nothing in your cart.");
+    } else {
+      setItemQuantities(resetQuantities);
+    }
+  };
+
+  const handleOrderClick = () => {
+    if (calculateTotal() === "0.00") {
+      alert("There is nothing in your cart.");
+    } else {
+      setShowFormPopup(true);
+    }
+  };
+  
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value
+    }));
+  };
+  
+  const handleOrderConfirm = () => {
+    const orderSummary = menuItems
+      .filter(item => itemQuantities[item.id] > 0)
+      // Trick for joining information together as a string
+      .map(item => `${itemQuantities[item.id]} ${item.title}`)
+      .join(' ');
+    
+    setOrderSummary(orderSummary);
+    setShowFormPopup(false);
+    setShowConfirmationPopup(true);
+  };
+
+  const handleConfirmationClose = () => {
+    setShowConfirmationPopup(false);
+    const resetQuantities = {};
+    menuItems.forEach(item => {
+      resetQuantities[item.id] = 0;
+    });
+    setItemQuantities(resetQuantities);
+  };
 
   return (
-    // <>
-    //   <div>
-    //     <a href="https://vite.dev" target="_blank">
-    //       <img src={viteLogo} className="logo" alt="Vite logo" />
-    //     </a>
-    //     <a href="https://react.dev" target="_blank">
-    //       <img src={reactLogo} className="logo react" alt="React logo" />
-    //     </a>
-    //   </div>
-    //   <h1>Vite + React</h1>
     <>
       <div>
         <div className="menu">
-
-          {/* Display menu items dynamicaly here by iterating over the provided menuItems */}
-          {/* <MenuItem title={menuItems[0].title} /> Example for how to use a component */}
-
           <MenuHeader />
           <div className="menu-grid">
             {menuItems.map(item => (
               <MenuItem
                   key={item.id}
+                  id={item.id} // for tracking cart instance variables
                   title={item.title}
                   description={item.description}
                   imageName={item.imageName}
                   price={item.price}
+                  quantity={itemQuantities[item.id]}
+                  onQuantityChange={updateQuantity}
               />
             ))}
           </div>
+
+          <div className="cart-summary">
+            <h2>Cart Total: ${calculateTotal()}</h2>
+              <button className="order-button" onClick={handleOrderClick}>Order</button>
+              <button className="clear-cart-button" onClick={clearCart}>Clear Cart</button>
+          </div>
+
         </div>
       </div>
+
+      {showFormPopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <h3>Complete your order</h3>
+            
+            <div className="form-group">
+              <label htmlFor="email">Email:</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="phone">Phone:</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            
+            <button className="ok-button" onClick={handleOrderConfirm}>OK</button>
+          </div>
+        </div>
+      )}
+
+      {showConfirmationPopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <h3>Order placed!</h3>
+            <p>{orderSummary}</p>
+            <button className="ok-button" onClick={handleConfirmationClose}>OK</button>
+          </div>
+        </div>
+      )}
     </>
-    //   <div className="card">
-    //     <button onClick={() => setCount((count) => count + 1)}>
-    //       count is {count}
-    //     </button>
-    //     <p>
-    //       Edit <code>src/App.jsx</code> and save to test HMR
-    //     </p>
-    //   </div>
-    //   <p className="read-the-docs">
-    //     Click on the Vite and React logos to learn more
-    //   </p>
-    // </>
   )
 }
 

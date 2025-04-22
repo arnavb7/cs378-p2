@@ -6,18 +6,19 @@ import './MenuItem.css'
 // Modify the component to take in all the other properties of a menu item you need and display them in the component.
 // Use bootstrap to style the elements so that it looks like the mockup in the assignment.
 // Hint: You can use the image name to get the image from the images folder.
-const MenuItem = ({ title, description, imageName, price }) => {
-    const [cartState, setCartState] = useState(0);
-
+const MenuItem = ({ id, title, description, imageName, price, quantity, onQuantityChange}) => {
     function handleAdd() {
-        setCartState(cartState + 1);
+        onQuantityChange(id, quantity + 1);
     }
 
     function handleSubtract() {
-        setCartState(Math.max(0, cartState - 1));
+        if (quantity > 0) {
+            onQuantityChange(id, quantity - 1);
+        }
     }
 
     const imageSrc = `${import.meta.env.BASE_URL}images/${imageName}`;
+
     return (
         <div className="menu-item">
             <div className="item-image">
@@ -32,8 +33,8 @@ const MenuItem = ({ title, description, imageName, price }) => {
                 <p className="description">{description}</p>
                 <div className="item-count-container">
                     <button className="buttons" onClick={handleAdd}>+</button>
-                    <p className="description">{cartState}</p>
-                    <button className="buttons" onClick={handleSubtract}>-</button>
+                    <p className="description">{quantity}</p>
+                    <button className="buttons" onClick={handleSubtract} disabled={quantity === 0}>-</button>
                 </div>
             </div>
         </div>
